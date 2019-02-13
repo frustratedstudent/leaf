@@ -16,10 +16,55 @@
 	</head>
 	<body>
 		<h1>My trips.</h1>
-		<p>Click on the Markers to open image Popups</p>	
+		<p>Click on the Markers to open image Popups</p>
+		<form action="/home" method="get">
+			<input type="submit" value="Home" />
+		</form>		
 		<div id="map"></div>
 		<script>
-		
+			var visited_countires = [];
+			
+			{% for row in rows %}
+				visited_countires.push("{{row[1]}}");
+			{% endfor %}
+			
+			function countriesStyle(feature){
+				return {
+					fillColor : getCountryColor(feature.properties.NAME_LONG),
+					weight : 2,
+					opacity : 1,
+					color : 'white',
+					dashArray : 3,
+					fillOpacity : 0.2
+					}
+				}
+			function getCountryColor(name){
+				if(visited_countires.includes(name)){
+					return 'orange';}
+				else{
+					return 'grey';}
+				}
+				
+			var map = L.map('map').setView([20, 0], 1);
+			var countriesLayer = L.geoJson(
+				countries,
+				{style : countriesStyle}
+			).addTo(map);			
+		</script>
+
+		<script>
+		{% for row in rows %}
+				var point = ["{{row[6]}}","{{row[7]}}"];
+				<!-- var point = [20,40]; -->
+				L.marker(point).addTo(map).bindPopup(
+					'<b>"{{row[2]}}"</b><div><img style="width:100%" src="{{row[4]}}" /></div>',
+				{minWidth : 256}
+				);
+        {% endfor %}
+		</script>
+		<script>
+
+	/*	
 			/*function getCountryColor(pop){
 				if(pop > 50000000){
 					return 'red';}
@@ -29,7 +74,7 @@
 					return 'yellow';}
 				else{
 					return 'white';}
-				}*/
+				
 			
 			function getCountryColor(visit){
 				if(visit == 0){
@@ -61,20 +106,21 @@
 			).addTo(map);
 			
 			 
-/*			var trips = {{ rows }};
+			var trips = "{{rows}}";
+			var l = trips.length
 			var i;
 			var point = [0,0];
 			
-			for(i=0; i<trips.length, i++){
+			for(i=0; i<l), i++){
 				point[0] = trips[i][6];
 				point[1] = trips.[i][7];
 				L.marker(point).addTo(map);
-				}*/
+				}
 			
 			
 			
 			
-			var paris = [48.8566, 2.3522];
+			/*var paris = [48.8566, 2.3522];
 			var beijing = [39.9042, 116.4074];
 			var delhi = [28.7041, 77.1025];
 			var mumbai = [19.0760, 72.8777];
@@ -105,8 +151,7 @@
 			marker5.bindPopup(
 				'<b>Bengaluru</b><div><img style="width:100%" src="https://i.ndtvimg.com/i/2015-04/bengaluru-generic_650x400_61429840846.jpg" alt="image" /></div>',
 			{minWidth : 256}
-			);
-			
+			);*/
 		</script>	
 	</body>
 </html>

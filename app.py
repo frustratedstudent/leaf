@@ -27,7 +27,6 @@ def choice():
 @app.route('/add', methods=["GET"])
 def trip_form():
 	return render_template('trip_form.html')
-	# return 'ok'
 
 @app.route('/add', methods=["POST"])
 def add_trip():
@@ -36,15 +35,15 @@ def add_trip():
 	
 	cur = conn.cursor()
 	
-	cur.execute('SELECT country FROM cities WHERE city=?', [request.form['city']])
+	cur.execute('SELECT country, north, east FROM cities WHERE city=?', [request.form['city']])
 	
-	country = cur.fetchone()[0]
-	# north = cur.fetchone()[1]
-	# east = cur.fetchone()[2]
-	# print(country)
+	row = cur.fetchone()
+	country = row[0]
+	north = row[1]
+	east = row[2]
 	
-	cur.execute('INSERT INTO visits(country, city, year, img_link, comment) VALUES(?,?,?,?,?)',
-				[country,request.form['city'],request.form['year'],request.form['img_link'],request.form['comment']])
+	cur.execute('INSERT INTO visits(country, city, year, img_link, comment, north, east) VALUES(?,?,?,?,?,?,?)',
+				[country,request.form['city'],request.form['year'],request.form['img_link'],request.form['comment'], north, east])
 				
 	conn.commit()
 	

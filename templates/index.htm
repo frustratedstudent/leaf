@@ -56,7 +56,7 @@
 		{% for row in rows %}
 				var point = ["{{row[6]}}","{{row[7]}}"];
 				L.marker(point).addTo(map).bindPopup(
-					'<b>"{{row[2]}}"</b><div><img style="width:100%" src="{{row[4]}}" /></div>',
+					'<b>"{{row[2]}}"</b><div><img style="width:100%" src="{{row[4]}}" /></div><b>Comment : "{{row[5]}}"</b>',
 				{minWidth : 256}
 				);
         {% endfor %}

@@ -62,10 +62,14 @@ def show_map():
 	
 	cur = conn.cursor()
 	
-	cur.execute('SELECT * FROM visits WHERE year=?', [request.form['year']])
+	if(request.form['year']=='9999'):
+		cur.execute('SELECT * FROM visits')
+	else:
+		cur.execute('SELECT * FROM visits WHERE year=?', [request.form['year']])
 	
 	rows = cur.fetchall();
 	
+	print(request.form['year'])
 	print(rows)
 	
 	return render_template('index.htm', rows = rows)
@@ -73,12 +77,6 @@ def show_map():
 	
 	
 	
-	
-	
-
-	
-	
-
 	
 if __name__ == '__main__':
     app.run()
